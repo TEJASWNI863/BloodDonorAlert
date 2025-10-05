@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Blood - BloodConnect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #e53e3e;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #e53e3e;
+        }
+
+        .main-content {
+            padding-top: 100px;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .form-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            max-width: 800px;
+            width: 100%;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .urgent-banner {
+            background: linear-gradient(45deg, #ff4757, #ff6b7a);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: pulse 2s infinite;
+        }
+
+        .urgent-banner h2 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .urgent-banner p {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .required {
+            color: #e53e3e;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e53e3e;
+            box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .blood-type-selector {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .blood-type-option {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .blood-type-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #e53e3e, #ff6b6b);
+            transition: left 0.3s ease;
+            z-index: -1;
+        }
+
+        .blood-type-option:hover {
+            border-color: #e53e3e;
+            color: #e53e3e;
+            transform: translateY(-2px);
+        }
+
+        .blood-type-option.selected {
+            border-color: #e53e3e;
+            color: white;
+        }
+
+        .blood-type-option.selected::before {
+            left: 0;
+        }
+
+        .urgency-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .urgency-option {
+            padding: 1rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .urgency-option h4 {
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .urgency-option p {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        .urgency-option.critical {
+            border-color: #dc2626;
+        }
+
+        .urgency-option.critical:hover,
+        .urgency-option.critical.selected {
+            background: #dc2626;
+            color: white;
+        }
+
+        .urgency-option.critical.selected p {
+            color: white;
+        }
+
+        .urgency-option.urgent {
+            border-color: #f59e0b;
+        }
+
+        .urgency-option.urgent:hover,
+        .urgency-option.urgent.selected {
+            background: #f59e0b;
+            color: white;
+        }
+
+        .urgency-option.urgent.selected p {
+            color: white;
+        }
+
+        .urgency-option.moderate {
+            border-color: #10b981;
+        }
+
+        .urgency-option.moderate:hover,
+        .urgency-option.moderate.selected {
+            background: #10b981;
+            color: white;
+        }
+
+        .urgency-option.moderate.selected p {
+            color: white;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1.2rem 2rem;
+            background: linear-gradient(45deg, #e53e3e, #ff6b6b);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(229, 62, 62, 0.4);
+        }
+
+        .error-message {
+            background: #fee;
+            border: 2px solid #e53e3e;
+            color: #c53030;
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            text-align: center;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(255, 71, 87, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(255, 71, 87, 0);
+            }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-content {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .form-container {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .blood-type-selector {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .urgency-selector {
+                grid-template-columns: 1fr;
+            }
+
+            .main-content {
+                padding-top: 120px;
+                align-items: flex-start;
+            }
+
+            .mobile-menu {
+                display: block;
+                background: none;
+                border: none;
+                font-size: 1.5rem;
+                cursor: pointer;
+                color: #333;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .mobile-menu {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="home.html" class="logo">BloodConnect</a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="register.html">Register</a></li>
+                <li><a href="blood-request.html" class="active">Request Blood</a></li>
+            </ul>
+            <button class="mobile-menu">Menu</button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="container">
+            <div class="form-container">
+                <div class="urgent-banner">
+                    <h2>Emergency Blood Request</h2>
+                    <p>Fill out this form to alert matching donors in your area immediately</p>
+                </div>
+                
+                <form id="requestForm" method="POST" action="submitBloodRequest">
+                    <div class="form-group">
+                        <label for="patientName">Patient Name <span class="required">*</span></label>
+                        <input type="text" id="patientName" name="patientName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Required Blood Type <span class="required">*</span></label>
+                        <div class="blood-type-selector">
+                            <div class="blood-type-option" onclick="selectBloodType(this)" data-type="A+">A+</div>
+                            <div class="blood-type-option" onclick="selectBloodType(this)" data-type="A-">A-</div>
+                            <div class="blood-type-option" onclick="selectBloodType(this)" data-type="B+">B+</div>
+                            <div class="blood-type-option" onclick="selectBloodType(this)" data-type="B-">B-</div>
+                            <div class="blood-type-option" onclick="selectBloodType(this)" data-type="AB+">AB+</div>
+                            <div class="blood-type-option" onclick="selectBloodType(this)" data-type="AB-">AB-</div>
+                            <div class="blood-type-option" onclick="selectBloodType(this)" data-type="O+">O+</div>
+                            <div class="blood-type-option" onclick="selectBloodType(this)" data-type="O-">O-</div>
+                        </div>
+                        <input type="hidden" id="requiredBloodType" name="requiredBloodType" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="patientAge">Patient Age</label>
+                        <input type="number" id="patientAge" name="patientAge" min="1" max="120">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Urgency Level <span class="required">*</span></label>
+                        <div class="urgency-selector">
+                            <div class="urgency-option critical" onclick="selectUrgency(this)" data-urgency="critical">
+                                <h4>Critical</h4>
+                                <p>0-2 hours</p>
+                            </div>
+                            <div class="urgency-option urgent" onclick="selectUrgency(this)" data-urgency="urgent">
+                                <h4>Urgent</h4>
+                                <p>2-6 hours</p>
+                            </div>
+                            <div class="urgency-option moderate" onclick="selectUrgency(this)" data-urgency="moderate">
+                                <h4>Moderate</h4>
+                                <p>6-24 hours</p>
+                            </div>
+                        </div>
+                        <input type="hidden" id="urgencyLevel" name="urgencyLevel" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="hospital">Hospital/Medical Center Name <span class="required">*</span></label>
+                        <input type="text" id="hospital" name="hospital" required>
+                    </div>
+                    
+                    <div class="form-row">
+    <div class="form-group">
+        <label for="hospitalCity">Hospital City <span class="required">*</span></label>
+        <input type="text" id="hospitalCity" name="hospitalCity" required>
+    </div>
+    <div class="form-group">
+        <label for="hospitalState">Hospital State <span class="required">*</span></label>
+        <input type="text" id="hospitalState" name="hospitalState" required>
+    </div>
+</div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contactPerson">Contact Person <span class="required">*</span></label>
+                            <input type="text" id="contactPerson" name="contactPerson" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="contactPhone">Contact Phone <span class="required">*</span></label>
+                            <input type="tel" id="contactPhone" name="contactPhone" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactEmail">Contact Email</label>
+                        <input type="email" id="contactEmail" name="contactEmail">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="medicalCondition">Medical Condition/Reason</label>
+                        <textarea id="medicalCondition" name="medicalCondition" rows="2" placeholder="Brief description of medical condition..."></textarea>
+                    </div>
+                    
+                    <button type="submit" class="submit-btn">Send Alert to Matching Donors</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedBloodType = null;
+        let selectedUrgency = null;
+
+        function selectBloodType(element) {
+            document.querySelectorAll('.blood-type-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedBloodType = element.getAttribute('data-type');
+            document.getElementById('requiredBloodType').value = selectedBloodType;
+        }
+
+        function selectUrgency(element) {
+            document.querySelectorAll('.urgency-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            element.classList.add('selected');
+            selectedUrgency = element.getAttribute('data-urgency');
+            document.getElementById('urgencyLevel').value = selectedUrgency;
+        }
+
+        function showError(message) {
+            let errorDiv = document.getElementById('errorMessage');
+            if (!errorDiv) {
+                errorDiv = document.createElement('div');
+                errorDiv.id = 'errorMessage';
+                errorDiv.className = 'error-message';
+                document.querySelector('.form-container').insertBefore(errorDiv, document.getElementById('requestForm'));
+            }
+            
+            errorDiv.textContent = message;
+            errorDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            
+            setTimeout(() => {
+                if (errorDiv) {
+                    errorDiv.remove();
+                }
+            }, 5000);
+        }
+
+        document.getElementById('requestForm').addEventListener('submit', function(e) {
+            if (!selectedBloodType) {
+                e.preventDefault();
+                showError('Please select the required blood type');
+                return false;
+            }
+
+            if (!selectedUrgency) {
+                e.preventDefault();
+                showError('Please select the urgency level');
+                return false;
+            }
+            
+            return true;
+        });
+
+        document.querySelector('.mobile-menu').addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            const isVisible = navLinks.style.display === 'flex';
+            navLinks.style.display = isVisible ? 'none' : 'flex';
+            
+            if (!isVisible) {
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'rgba(255, 255, 255, 0.98)';
+                navLinks.style.padding = '1rem';
+                navLinks.style.boxShadow = '0 5px 15px rgba(0,0,0,0.1)';
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentTime = new Date().toLocaleString();
+            const timeInfo = document.createElement('div');
+            timeInfo.style.cssText = `
+                background: rgba(229, 62, 62, 0.1);
+                padding: 0.8rem;
+                border-radius: 8px;
+                margin-bottom: 1rem;
+                text-align: center;
+                color: #e53e3e;
+                font-weight: 500;
+            `;
+            timeInfo.textContent = `Request Time: ${currentTime}`;
+            document.querySelector('.urgent-banner').appendChild(timeInfo);
+        });
+    </script>
+</body>
+</html>

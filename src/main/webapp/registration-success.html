@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Successful - BloodConnect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .success-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 4rem 3rem;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            text-align: center;
+            max-width: 600px;
+            width: 100%;
+            animation: successAnimation 0.8s ease;
+        }
+
+        .success-icon {
+            font-size: 5rem;
+            margin-bottom: 2rem;
+            animation: bounce 2s infinite;
+        }
+
+        .success-container h1 {
+            color: #38a169;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .success-container h2 {
+            color: #e53e3e;
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+        }
+
+        .donor-details {
+            background: #f8f9ff;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            text-align: left;
+            border-left: 4px solid #e53e3e;
+        }
+
+        .donor-details h3 {
+            color: #333;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .detail-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #666;
+        }
+
+        .detail-value {
+            color: #333;
+            font-weight: 500;
+            text-align: right;
+            max-width: 60%;
+            word-wrap: break-word;
+        }
+
+        .blood-type-highlight {
+            background: linear-gradient(45deg, #e53e3e, #ff6b6b);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: bold;
+        }
+
+        .next-steps {
+            background: #e8f5e8;
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+            border-left: 4px solid #38a169;
+            text-align: left;
+        }
+
+        .next-steps h3 {
+            color: #38a169;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .next-steps ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .next-steps li {
+            padding: 0.5rem 0;
+            color: #2d7d32;
+        }
+
+        .next-steps li::before {
+            content: '✓';
+            color: #38a169;
+            font-weight: bold;
+            margin-right: 0.5rem;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #e53e3e, #ff6b6b);
+            color: white;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #e53e3e;
+            border: 2px solid #e53e3e;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+        }
+
+        .countdown-timer {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(229, 62, 62, 0.1);
+            border-radius: 10px;
+            color: #e53e3e;
+            font-weight: 500;
+        }
+
+        @keyframes successAnimation {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .success-container {
+                padding: 2rem 1.5rem;
+                margin: 1rem;
+            }
+
+            .success-container h1 {
+                font-size: 2rem;
+            }
+
+            .success-container h2 {
+                font-size: 1.5rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .detail-item {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .detail-value {
+                text-align: left;
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="success-icon">🎉</div>
+        <h1>Congratulations!</h1>
+        <h2>Your Registration is Successful</h2>
+        <p style="color: #666; font-size: 1.1rem; margin-bottom: 2rem;">
+            Welcome to the BloodConnect community! You are now part of a network of heroes saving lives.
+        </p>
+
+        <div class="donor-details" id="donorDetails">
+            <h3>Your Donor Profile</h3>
+            <!-- Details will be populated by JavaScript -->
+        </div>
+
+        <div class="next-steps">
+            <h3>What Happens Next?</h3>
+            <ul>
+                <li>You will receive email notifications for matching blood requests</li>
+                <li>We'll only contact you when there's a request in your area</li>
+                <li>You can update your availability anytime in the dashboard</li>
+                <li>Your contact details will be shared only with hospitals/patients</li>
+                <li>You can view your donation history and impact statistics</li>
+            </ul>
+        </div>
+
+        <div class="action-buttons">
+            <a href="home.html" class="btn btn-primary">Redirecting to home page</a>
+            <a href="home.html" class="btn btn-outline">Back to Home</a>
+        </div>
+
+        <div class="countdown-timer" id="countdownTimer">
+            Redirecting to home page in <span id="countdown">10</span> seconds...
+        </div>
+    </div>
+
+    <script>
+        // Load and display donor data from URL parameters
+        function loadDonorData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const detailsContainer = document.getElementById('donorDetails');
+            
+            // Get data from URL parameters
+            const firstName = urlParams.get('firstName') || 'N/A';
+            const lastName = urlParams.get('lastName') || 'N/A';
+            const email = urlParams.get('email') || 'N/A';
+            const phone = urlParams.get('phone') || 'N/A';
+            const bloodType = urlParams.get('bloodType') || 'N/A';
+            const city = urlParams.get('city') || 'N/A';
+            const state = urlParams.get('state') || 'N/A';
+
+            // If no parameters found, show a generic message
+            if (firstName === 'N/A' && lastName === 'N/A') {
+                detailsContainer.innerHTML = `
+                    <h3>Your Donor Profile</h3>
+                    <p style="text-align: center; color: #666;">
+                        Your registration has been completed successfully!<br>
+                        
+                    </p>
+                `;
+                return;
+            }
+
+            detailsContainer.innerHTML = `
+                <h3>Your Donor Profile</h3>
+                <div class="detail-item">
+                    <span class="detail-label">Name:</span>
+                    <span class="detail-value">${firstName} ${lastName}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Email:</span>
+                    <span class="detail-value">${email}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Phone:</span>
+                    <span class="detail-value">${phone}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Blood Type:</span>
+                    <span class="detail-value">
+                        <span class="blood-type-highlight">${bloodType}</span>
+                    </span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">City:</span>
+                    <span class="detail-value">${city}</span>
+                </div>
+                <div class="detail-item">
+                <span class="detail-label">State:</span>
+                <span class="detail-value">${state}</span>
+            </div>
+                
+            `;
+        }
+
+        // Countdown timer
+        function startCountdown() {
+            let count = 10;
+            const countdownElement = document.getElementById('countdown');
+            const timerElement = document.getElementById('countdownTimer');
+            
+            const interval = setInterval(() => {
+                count--;
+                countdownElement.textContent = count;
+                
+                if (count <= 0) {
+                    clearInterval(interval);
+                    window.location.href = 'home.html';
+                }
+                
+                // Change color as countdown gets lower
+                if (count <= 3) {
+                    timerElement.style.background = 'rgba(229, 62, 62, 0.2)';
+                    timerElement.style.color = '#c53030';
+                }
+            }, 1000);
+            
+            // Stop countdown if user clicks any button
+            document.querySelectorAll('.btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    clearInterval(interval);
+                    timerElement.style.display = 'none';
+                });
+            });
+        }
+
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDonorData();
+            startCountdown();
+            
+            // Add some celebratory effects
+            setTimeout(() => {
+                document.querySelector('.success-icon').style.transform = 'scale(1.2)';
+                setTimeout(() => {
+                    document.querySelector('.success-icon').style.transform = 'scale(1)';
+                }, 200);
+            }, 500);
+        });
+    </script>
+</body>
+</html>
