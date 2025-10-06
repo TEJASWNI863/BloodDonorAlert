@@ -33,21 +33,31 @@ public class MyAppConfig implements WebMvcConfigurer {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-        String dbUrl = System.getenv("DATABASE_URL");
-        String dbUser = System.getenv("DB_USERNAME");
-        String dbPassword = System.getenv("DB_PASSWORD");
+        
+        // Get Railway environment variables
+        String dbHost = System.getenv("MYSQLHOST");
+        String dbPort = System.getenv("MYSQLPORT");
+        String dbName = System.getenv("MYSQL_DATABASE");
+        String dbUser = System.getenv("MYSQLUSER");
+        String dbPassword = System.getenv("MYSQLPASSWORD");
 
         // Fallback to local values if environment variables not set
-        if (dbUrl == null) {
-            dbUrl = "jdbc:mysql://localhost:3306/blooddonors";
+        if (dbHost == null) {
+            dbHost = "localhost";
+            dbPort = "3306";
+            dbName = "blooddonors";
             dbUser = "root";
             dbPassword = "srinivasarao@123";
         }
+
+        // Build the database URL
+        String dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
 
         driverManagerDataSource.setUsername(dbUser);
         driverManagerDataSource.setPassword(dbPassword);
         driverManagerDataSource.setUrl(dbUrl);
         driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
+        
         return driverManagerDataSource;
     }
     
