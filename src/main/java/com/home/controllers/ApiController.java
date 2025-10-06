@@ -22,9 +22,6 @@ public class ApiController {
 
     @Autowired
     private DonorDAO donorDAO;
-    
-    @Autowired
-    private SimpleEmailTest emailService;  // ✅ ADD THIS - Let Spring inject it
 
     @GetMapping("/blood-request/{id}")
     public ResponseEntity<BloodRequest> getBloodRequest(@PathVariable("id") Long id) {
@@ -76,14 +73,11 @@ public class ApiController {
 
         // Send emails to matching donors (now filtered by location)
         if (bloodRequest != null && matchingDonors != null && !matchingDonors.isEmpty()) {
-            // ❌ REMOVE THIS LINE:
-            // SimpleEmailTest emailSender = new SimpleEmailTest();
-            
+            SimpleEmailTest emailSender = new SimpleEmailTest();
             int emailsSent = 0;
             for (Donor donor : matchingDonors) {
                 try {
-                    // ✅ USE THE INJECTED SERVICE:
-                    emailService.sendEmail(donor.getEmail(), bloodRequest);
+                    emailSender.sendEmail(donor.getEmail(), bloodRequest);
                     emailsSent++;
                     System.out.println("Email sent to: " + donor.getEmail() + 
                         " (" + donor.getFirstName() + " " + donor.getLastName() + ") in " + 
