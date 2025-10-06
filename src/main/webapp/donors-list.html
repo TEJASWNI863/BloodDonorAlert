@@ -522,54 +522,7 @@
             }
         });
 
-        /*function fetchBloodRequestData(requestId) {
-            // Get context path
-            const pathArray = window.location.pathname.split('/');
-            const contextPath = pathArray.length > 1 && pathArray[1] ? '/' + pathArray[1] : '';
-            
-            console.log('Context Path:', contextPath);
-            console.log('Fetching blood request for ID:', requestId);
-            
-            const requestUrl = contextPath + '/api/blood-request/' + requestId;
-            console.log('Request URL:', requestUrl);
-            
-            fetch(requestUrl)
-                .then(response => {
-                    console.log('Blood Request Response Status:', response.status);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch request. Status: ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(request => {
-                    console.log('Blood Request Data received:', request);
-                    requestData = request;
-                    populateRequestSummary(request);
-                    
-                    // Fetch matching donors
-                    const donorsUrl = contextPath + '/api/matching-donors?bloodType=' + 
-                                    encodeURIComponent(request.requiredBloodType) + 
-                                    '&requestId=' + requestId;
-                    console.log('Fetching donors from:', donorsUrl);
-                    return fetch(donorsUrl);
-                })
-                .then(response => {
-                    console.log('Donors Response Status:', response.status);
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch donors. Status: ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Donors Data received:', data);
-                    donorsData = data.donors || [];
-                    console.log('Number of donors:', donorsData.length);
-                    displayDonors(donorsData);
-                })
-                .catch(error => {
-                    console.error('Error in fetch chain:', error);
-                    showError('Failed to load data: ' + error.message);
-                });*/
+        
                 function fetchBloodRequestData(requestId) {
                     // Railway backend URL
                     const BACKEND_URL = 'https://blooddonoralert-production.up.railway.app';
