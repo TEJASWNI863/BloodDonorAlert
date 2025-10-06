@@ -522,7 +522,7 @@
             }
         });
 
-        function fetchBloodRequestData(requestId) {
+        /*function fetchBloodRequestData(requestId) {
             // Get context path
             const pathArray = window.location.pathname.split('/');
             const contextPath = pathArray.length > 1 && pathArray[1] ? '/' + pathArray[1] : '';
@@ -569,8 +569,8 @@
                 .catch(error => {
                     console.error('Error in fetch chain:', error);
                     showError('Failed to load data: ' + error.message);
-                });}
-                /*function fetchBloodRequestData(requestId) {
+                });*/
+                function fetchBloodRequestData(requestId) {
                     // Railway backend URL
                     const BACKEND_URL = 'https://blooddonoralert-production.up.railway.app';
                     
@@ -616,7 +616,7 @@
                             console.error('Error in fetch chain:', error);
                             showError('Failed to load data: ' + error.message);
                         });
-                }*/
+                }
         
 
         function populateRequestSummary(request) {
