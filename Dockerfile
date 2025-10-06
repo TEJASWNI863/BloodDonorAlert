@@ -9,5 +9,9 @@ RUN mvn clean package -DskipTests
 FROM tomcat:11-jdk17
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
 COPY --from=build /app/target/BloodDonorAlert.war /usr/local/tomcat/webapps/ROOT.war
+
+# Expose the port
 EXPOSE 8080
-CMD ["catalina.sh", "run"]
+
+# Start Tomcat with PORT from environment
+CMD ["sh", "-c", "catalina.sh run"]
