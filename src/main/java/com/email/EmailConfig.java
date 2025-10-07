@@ -24,7 +24,7 @@ public class EmailConfig {
         
         props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
         
-        
+        props.put("mail.smtp.auth", "true");  
         return sender;
     }
 }
