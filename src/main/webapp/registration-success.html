@@ -283,6 +283,7 @@
             const phone = urlParams.get('phone') || 'N/A';
             const bloodType = urlParams.get('bloodType') || 'N/A';
             const city = urlParams.get('city') || 'N/A';
+            const district = urlParams.get('district') || 'N/A';
             const state = urlParams.get('state') || 'N/A';
 
             // If no parameters found, show a generic message
@@ -321,6 +322,10 @@
                     <span class="detail-label">City:</span>
                     <span class="detail-value">${city}</span>
                 </div>
+                <div class="detail-item">
+                <span class="detail-label">District:</span>
+                <span class="detail-value">${district}</span>
+            </div>
                 <div class="detail-item">
                 <span class="detail-label">State:</span>
                 <span class="detail-value">${state}</span>

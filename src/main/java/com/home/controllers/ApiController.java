@@ -37,33 +37,35 @@ public class ApiController {
             @RequestParam("bloodType") String bloodType,
             @RequestParam(value = "requestId", required = false) Long requestId) {
 
-        // Get the actual blood request if requestId is provided
         BloodRequest bloodRequest = null;
         List<Donor> matchingDonors;
-        
+
         if (requestId != null) {
             bloodRequest = bloodRequestDAO.findById(requestId);
-            
-            // If we have the blood request with location, filter by location too
-            if (bloodRequest != null && 
+
+            // If we have the blood request with full location, filter by all location fields
+            if (bloodRequest != null &&
                 bloodRequest.getHospitalCity() != null && !bloodRequest.getHospitalCity().trim().isEmpty() &&
+                bloodRequest.getHospitalDistrict() != null && !bloodRequest.getHospitalDistrict().trim().isEmpty() &&
                 bloodRequest.getHospitalState() != null && !bloodRequest.getHospitalState().trim().isEmpty()) {
-                
-                // Match by blood type, city, AND state
+
+                // Match by blood type, city, district, AND state
                 matchingDonors = donorDAO.findByBloodTypeAndLocation(
                     bloodType,
                     bloodRequest.getHospitalCity(),
+                    bloodRequest.getHospitalDistrict(),
                     bloodRequest.getHospitalState()
                 );
-                
-                System.out.println("Filtering donors by blood type: " + bloodType + 
-                    ", city: " + bloodRequest.getHospitalCity() + 
+
+                System.out.println("Filtering donors by blood type: " + bloodType +
+                    ", city: " + bloodRequest.getHospitalCity() +
+                    ", district: " + bloodRequest.getHospitalDistrict() +
                     ", state: " + bloodRequest.getHospitalState());
                 System.out.println("Found " + matchingDonors.size() + " matching donors");
             } else {
-                // Fallback to blood type only if location not available
+                // Fallback to blood type only if location not fully available
                 matchingDonors = donorDAO.findByBloodType(bloodType);
-                System.out.println("Filtering donors by blood type only (no location data available)");
+                System.out.println("Filtering donors by blood type only (location data incomplete)");
             }
         } else {
             // No request ID, just filter by blood type
@@ -71,7 +73,7 @@ public class ApiController {
             System.out.println("No request ID provided, filtering by blood type only");
         }
 
-        // Send emails to matching donors (now filtered by location)
+        // Send emails to matching donors
         if (bloodRequest != null && matchingDonors != null && !matchingDonors.isEmpty()) {
             SimpleEmailTest emailSender = new SimpleEmailTest();
             int emailsSent = 0;
@@ -79,9 +81,9 @@ public class ApiController {
                 try {
                     emailSender.sendEmail(donor.getEmail(), bloodRequest);
                     emailsSent++;
-                    System.out.println("Email sent to: " + donor.getEmail() + 
-                        " (" + donor.getFirstName() + " " + donor.getLastName() + ") in " + 
-                        donor.getCity() + ", " + donor.getState());
+                    System.out.println("Email sent to: " + donor.getEmail() +
+                        " (" + donor.getFirstName() + " " + donor.getLastName() + ") in " +
+                        donor.getCity() + ", " + donor.getDistrict() + ", " + donor.getState());
                 } catch (Exception e) {
                     System.err.println("Failed to send email to " + donor.getEmail() + ": " + e.getMessage());
                     e.printStackTrace();

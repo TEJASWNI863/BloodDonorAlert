@@ -1,7 +1,5 @@
 package com.home.model;
 
-
-
 public class BloodRequest {
     private Long id;
     private String patientName;
@@ -10,11 +8,12 @@ public class BloodRequest {
     private String urgencyLevel;
     private String hospital;
     private String hospitalCity;
+    private String hospitalDistrict;  // NEW FIELD
     private String hospitalState;
     private String contactPerson;
     private String contactPhone;
     private String contactEmail;
-   
+
     // Constructors
     public BloodRequest() {}
 
@@ -67,8 +66,6 @@ public class BloodRequest {
         this.hospital = hospital;
     }
 
-    
-
     public String getContactPerson() {
         return contactPerson;
     }
@@ -93,7 +90,30 @@ public class BloodRequest {
         this.contactEmail = contactEmail;
     }
 
-    
+    public String getHospitalCity() {
+        return hospitalCity;
+    }
+
+    public void setHospitalCity(String hospitalCity) {
+        this.hospitalCity = hospitalCity;
+    }
+
+    // NEW GETTER AND SETTER FOR DISTRICT
+    public String getHospitalDistrict() {
+        return hospitalDistrict;
+    }
+
+    public void setHospitalDistrict(String hospitalDistrict) {
+        this.hospitalDistrict = hospitalDistrict;
+    }
+
+    public String getHospitalState() {
+        return hospitalState;
+    }
+
+    public void setHospitalState(String hospitalState) {
+        this.hospitalState = hospitalState;
+    }
 
     @Override
     public String toString() {
@@ -103,22 +123,7 @@ public class BloodRequest {
                 ", requiredBloodType='" + requiredBloodType + '\'' +
                 ", urgencyLevel='" + urgencyLevel + '\'' +
                 ", hospital='" + hospital + '\'' +
+                ", hospitalDistrict='" + hospitalDistrict + '\'' +
                 '}';
     }
-
-	public String getHospitalCity() {
-		return hospitalCity;
-	}
-
-	public void setHospitalCity(String hospitalCity) {
-		this.hospitalCity = hospitalCity;
-	}
-
-	public String getHospitalState() {
-		return hospitalState;
-	}
-
-	public void setHospitalState(String hospitalState) {
-		this.hospitalState = hospitalState;
-	}
 }

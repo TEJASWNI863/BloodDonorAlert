@@ -12,9 +12,9 @@ public class Donor {
     private Double weight;
     private String gender;
     private String bloodType;
-   
-    private String city;           
-    private String state;          
+    private String city;
+    private String district;  // NEW FIELD
+    private String state;
     private Boolean termsAccepted;
     private Boolean notificationsEnabled;
     private Boolean enabled;
@@ -115,15 +115,21 @@ public class Donor {
         this.bloodType = bloodType;
     }
 
-   
-
-    
     public String getCity() {
         return city;
     }
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    // NEW GETTER AND SETTER FOR DISTRICT
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
     }
 
     public String getState() {
@@ -168,6 +174,7 @@ public class Donor {
                 ", email='" + email + '\'' +
                 ", bloodType='" + bloodType + '\'' +
                 ", city='" + city + '\'' +
+                ", district='" + district + '\'' +
                 ", state='" + state + '\'' +
                 '}';
     }

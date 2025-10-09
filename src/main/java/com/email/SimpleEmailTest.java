@@ -43,6 +43,7 @@ public class SimpleEmailTest {
         body.append("----------------\n");
         body.append("Hospital Name: ").append(request.getHospital()).append("\n");
         body.append("Hospital State: ").append(request.getHospitalState()).append("\n\n");
+        body.append("Hospital District: ").append(request.getHospitalDistrict()).append("\n\n");
         body.append("Hospital City: ").append(request.getHospitalCity()).append("\n\n");
         body.append("Contact Information:\n");
         body.append("-------------------\n");

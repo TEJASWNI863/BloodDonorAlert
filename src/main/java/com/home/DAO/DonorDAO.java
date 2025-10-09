@@ -31,43 +31,38 @@ public class DonorDAO {
             donor.setWeight(rs.getDouble("weight"));
             donor.setGender(rs.getString("gender"));
             donor.setBloodType(rs.getString("blood_type"));
-            
             donor.setCity(rs.getString("city"));
+            donor.setDistrict(rs.getString("district"));  // NEW
             donor.setState(rs.getString("state"));
-            
-            
             donor.setTermsAccepted(rs.getBoolean("terms_accepted"));
             donor.setNotificationsEnabled(rs.getBoolean("notifications_enabled"));
             donor.setEnabled(rs.getBoolean("enabled"));
-            
-            
-            
             return donor;
         }
     }
 
     public void save(Donor donor) {
         String sql = "INSERT INTO donor (username, password, first_name, last_name, email, phone, " +
-                     "age, weight, gender, blood_type, city,state,terms_accepted, " +
-                     "notifications_enabled, enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?,?)";
-        
+                "age, weight, gender, blood_type, city, district, state, terms_accepted, " +
+                "notifications_enabled, enabled) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
         jdbcTemplate.update(sql,
-            donor.getUsername(),
-            donor.getPassword(),
-            donor.getFirstName(),
-            donor.getLastName(),
-            donor.getEmail(),
-            donor.getPhone(),
-            donor.getAge(),
-            donor.getWeight(),
-            donor.getGender(),
-            donor.getBloodType(),
-            
-            donor.getCity(),
-            donor.getState(),
-            donor.getTermsAccepted(),
-            donor.getNotificationsEnabled(),
-            donor.getEnabled() != null ? donor.getEnabled() : true
+                donor.getUsername(),
+                donor.getPassword(),
+                donor.getFirstName(),
+                donor.getLastName(),
+                donor.getEmail(),
+                donor.getPhone(),
+                donor.getAge(),
+                donor.getWeight(),
+                donor.getGender(),
+                donor.getBloodType(),
+                donor.getCity(),
+                donor.getDistrict(),
+                donor.getState(),
+                donor.getTermsAccepted() != null ? donor.getTermsAccepted() : false,  // ADD NULL CHECK
+                donor.getNotificationsEnabled() != null ? donor.getNotificationsEnabled() : true,  // ADD NULL CHECK
+                donor.getEnabled() != null ? donor.getEnabled() : true
         );
     }
 
@@ -87,10 +82,14 @@ public class DonorDAO {
         String sql = "SELECT * FROM donor WHERE blood_type = ? AND enabled = true";
         return jdbcTemplate.query(sql, new DonorRowMapper(), bloodType);
     }
-    public List<Donor> findByBloodTypeAndLocation(String bloodType, String city, String state) {
-        String sql = "SELECT * FROM donor WHERE blood_type = ? AND LOWER(city) = LOWER(?) AND LOWER(state) = LOWER(?)";
-        return jdbcTemplate.query(sql, new DonorRowMapper(), bloodType, city, state);
+
+    // UPDATED METHOD - Now includes district matching
+    public List<Donor> findByBloodTypeAndLocation(String bloodType, String city, String district, String state) {
+        String sql = "SELECT * FROM donor WHERE blood_type = ? AND LOWER(city) = LOWER(?) " +
+                "AND LOWER(district) = LOWER(?) AND LOWER(state) = LOWER(?) AND enabled = true";
+        return jdbcTemplate.query(sql, new DonorRowMapper(), bloodType, city, district, state);
     }
+
     public List<Donor> findAll() {
         String sql = "SELECT * FROM donor";
         return jdbcTemplate.query(sql, new DonorRowMapper());
