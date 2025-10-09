@@ -23,9 +23,6 @@ public class ApiController {
     @Autowired
     private DonorDAO donorDAO;
 
-    @Autowired
-    private SimpleEmailTest emailService; // ✅ ADD THIS LINE!
-
     @GetMapping("/blood-request/{id}")
     public ResponseEntity<BloodRequest> getBloodRequest(@PathVariable("id") Long id) {
         BloodRequest request = bloodRequestDAO.findById(id);
@@ -78,11 +75,11 @@ public class ApiController {
 
         // Send emails to matching donors
         if (bloodRequest != null && matchingDonors != null && !matchingDonors.isEmpty()) {
-            // ✅ REMOVED: SimpleEmailTest emailSender = new SimpleEmailTest();
+            SimpleEmailTest emailSender = new SimpleEmailTest();
             int emailsSent = 0;
             for (Donor donor : matchingDonors) {
                 try {
-                    emailService.sendEmail(donor.getEmail(), bloodRequest); // ✅ USE emailService
+                    emailSender.sendEmail(donor.getEmail(), bloodRequest);
                     emailsSent++;
                     System.out.println("Email sent to: " + donor.getEmail() +
                         " (" + donor.getFirstName() + " " + donor.getLastName() + ") in " +

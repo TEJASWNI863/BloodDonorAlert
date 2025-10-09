@@ -11,36 +11,27 @@ import java.util.Properties;
 @Configuration
 public class EmailConfig {
 
-    @Value("${MAIL_HOST:smtp-relay.brevo.com}")
-    private String mailHost;
-    
-    @Value("${MAIL_PORT:587}")
-    private int mailPort;
-
-    @Value("${MAIL_USERNAME:98e39f001@smtp-brevo.com}")
+    @Value("${MAIL_USERNAME:potnurusrinivasarao29@gmail.com}")
     private String mailUsername;
-
-    @Value("${MAIL_PASSWORD:Ih8OMxQ1f0gNpER7}")
-    private String mailPassword;
     
-    @Value("${MAIL_FROM:tejaswinipotnuru1@gmail.com}")
-    private String mailFrom;
+    @Value("${MAIL_PASSWORD:aatyoxzmfvaylznd}")
+    private String mailPassword;
 
     @Bean
     public JavaMailSender mailSender() {
         JavaMailSenderImpl sender = new JavaMailSenderImpl();
-        sender.setHost(mailHost);
-        sender.setPort(mailPort);
+        sender.setHost("smtp.gmail.com");
+        sender.setPort(587);
         sender.setUsername(mailUsername);
         sender.setPassword(mailPassword);
 
         Properties props = sender.getJavaMailProperties();
-        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.auth", "true");  // CRITICAL!
         props.put("mail.smtp.starttls.enable", "true");
-        props.put("mail.smtp.starttls.required", "true");
-        props.put("mail.smtp.connectiontimeout", "5000");
-        props.put("mail.smtp.timeout", "5000");
-        props.put("mail.smtp.writetimeout", "5000");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        props.put("mail.smtp.connectiontimeout", "10000");
+        props.put("mail.smtp.timeout", "10000");
+        props.put("mail.smtp.writetimeout", "10000");
 
         return sender;
     }
