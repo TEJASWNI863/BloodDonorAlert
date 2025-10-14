@@ -29,12 +29,11 @@ public class MyAppConfig implements WebMvcConfigurer {
         resolver.setSuffix(".jsp");
         return resolver;
     }
-
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
 
-        // Get environment variables for Render/Aiven
+        // Get Render environment variables (updated names)
         String dbHost = System.getenv("DB_HOST");
         String dbPort = System.getenv("DB_PORT");
         String dbName = System.getenv("DB_NAME");
@@ -42,7 +41,7 @@ public class MyAppConfig implements WebMvcConfigurer {
         String dbPassword = System.getenv("DB_PASSWORD");
 
         // Fallback to local values if environment variables not set
-        if (dbHost == null || dbHost.isEmpty()) {
+        if (dbHost == null) {
             dbHost = "localhost";
             dbPort = "3306";
             dbName = "blooddonors";
@@ -50,9 +49,9 @@ public class MyAppConfig implements WebMvcConfigurer {
             dbPassword = "srinivasarao@123";
         }
 
-        // Build the database URL
+        // Build the database URL with SSL (required for Aiven)
         String dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName 
-                     + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
+                       + "?useSSL=true&requireSSL=true&verifyServerCertificate=false";
 
         driverManagerDataSource.setUsername(dbUser);
         driverManagerDataSource.setPassword(dbPassword);
@@ -61,7 +60,6 @@ public class MyAppConfig implements WebMvcConfigurer {
 
         return driverManagerDataSource;
     }
-
     @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
