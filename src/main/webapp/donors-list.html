@@ -523,13 +523,16 @@
         });
 
         
+                
                 function fetchBloodRequestData(requestId) {
-                    // Railway backend URL
-                    const BACKEND_URL = 'https://blooddonoralert-production.up.railway.app';
+                    // Get context path
+                    const pathArray = window.location.pathname.split('/');
+                    const contextPath = pathArray.length > 1 && pathArray[1] ? '/' + pathArray[1] : '';
                     
+                    console.log('Context Path:', contextPath);
                     console.log('Fetching blood request for ID:', requestId);
                     
-                    const requestUrl = BACKEND_URL + '/api/blood-request/' + requestId;
+                    const requestUrl = contextPath + '/api/blood-request/' + requestId;
                     console.log('Request URL:', requestUrl);
                     
                     fetch(requestUrl)
@@ -546,7 +549,7 @@
                             populateRequestSummary(request);
                             
                             // Fetch matching donors
-                            const donorsUrl = BACKEND_URL + '/api/matching-donors?bloodType=' + 
+                            const donorsUrl = contextPath + '/api/matching-donors?bloodType=' + 
                                             encodeURIComponent(request.requiredBloodType) + 
                                             '&requestId=' + requestId;
                             console.log('Fetching donors from:', donorsUrl);
@@ -568,9 +571,7 @@
                         .catch(error => {
                             console.error('Error in fetch chain:', error);
                             showError('Failed to load data: ' + error.message);
-                        });
-                }
-                
+                        });}
 
         function populateRequestSummary(request) {
             console.log('Populating request summary');
