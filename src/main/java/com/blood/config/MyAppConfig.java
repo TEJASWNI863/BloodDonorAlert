@@ -33,16 +33,16 @@ public class MyAppConfig implements WebMvcConfigurer {
     @Bean
     public DataSource dataSource() {
         DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
-        
-        // Get Railway environment variables
-        String dbHost = System.getenv("MYSQLHOST");
-        String dbPort = System.getenv("MYSQLPORT");
-        String dbName = System.getenv("MYSQL_DATABASE");
-        String dbUser = System.getenv("MYSQLUSER");
-        String dbPassword = System.getenv("MYSQLPASSWORD");
+
+        // Get environment variables for Render/Aiven
+        String dbHost = System.getenv("DB_HOST");
+        String dbPort = System.getenv("DB_PORT");
+        String dbName = System.getenv("DB_NAME");
+        String dbUser = System.getenv("DB_USERNAME");
+        String dbPassword = System.getenv("DB_PASSWORD");
 
         // Fallback to local values if environment variables not set
-        if (dbHost == null) {
+        if (dbHost == null || dbHost.isEmpty()) {
             dbHost = "localhost";
             dbPort = "3306";
             dbName = "blooddonors";
@@ -51,16 +51,17 @@ public class MyAppConfig implements WebMvcConfigurer {
         }
 
         // Build the database URL
-        String dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName;
+        String dbUrl = "jdbc:mysql://" + dbHost + ":" + dbPort + "/" + dbName 
+                     + "?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
         driverManagerDataSource.setUsername(dbUser);
         driverManagerDataSource.setPassword(dbPassword);
         driverManagerDataSource.setUrl(dbUrl);
         driverManagerDataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        
+
         return driverManagerDataSource;
     }
-    
+
     @Bean
     public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource());
